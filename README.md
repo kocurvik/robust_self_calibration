@@ -37,7 +37,7 @@ First you have to prepare the datasets:
     python datasets/prepare_im.py -n 1000 -m loftr1024 /path/to/aachen/dataset
     python datasets/prepare_single.py -n 1000 -m loftr1024 /path/to/ETH3D/multiview/dataset
 
-### Alternative: download all of the matches
+### Alternative: download the matches
 You can alternatively download the matches from this address: TBA
 
 Then you can run the evaluation scripts:
