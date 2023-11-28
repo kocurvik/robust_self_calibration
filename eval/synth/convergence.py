@@ -7,7 +7,7 @@ from tqdm import tqdm
 
 from datasets.definitions import get_subset_string
 from eval.synth.synth_scenarios import get_scene, coplanar_scene, noncoplanar_scene, set_scene
-from matlab_utils.engine_calls import kukelova_uncal
+from matlab_utils.engine_calls import ours_uncal
 
 
 def percentile_under(rel_change, param):
@@ -38,7 +38,7 @@ def convergence_plot(f1, f2, R, t, max_iters=5000):
         F, mask = cv2.findFundamentalMat(xx1, xx2, cv2.USAC_MAGSAC, ransacReprojThreshold=3.0, confidence=1.0,
                                               maxIters=10000)
 
-        _, _, _, _, errs, iters = kukelova_uncal(eng, F, 660, 440, iters=max_iters, return_err=True, all_iters=True)
+        _, _, _, _, errs, iters = ours_uncal(eng, F, 660, 440, iters=max_iters, return_err=True, all_iters=True)
         iters_list.append(iters)
         errs_list.append(errs)
 
@@ -99,7 +99,7 @@ def pt_convergence_plot(max_iters=5000):
         F, mask = cv2.findFundamentalMat(kp_1, kp_2, cv2.USAC_MAGSAC, ransacReprojThreshold=3.0, confidence=1.0,
                                          maxIters=10000)
 
-        _, _, _, _, errs, iters = kukelova_uncal(eng, F, colmap_1, colmap_2, iters=max_iters, return_err=True, all_iters=True)
+        _, _, _, _, errs, iters = ours_uncal(eng, F, colmap_1, colmap_2, iters=max_iters, return_err=True, all_iters=True)
         s = np.array(errs).shape
         if s != (max_iters+1, 1):
             continue

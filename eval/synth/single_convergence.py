@@ -7,7 +7,7 @@ from tqdm import tqdm
 
 from datasets.definitions import get_subset_string
 from eval.synth.synth_scenarios import get_scene, coplanar_scene, noncoplanar_scene, set_scene
-from matlab_utils.engine_calls import kukelova_single
+from matlab_utils.engine_calls import ours_single
 
 
 def percentile_under(rel_change, param):
@@ -37,7 +37,7 @@ def single_convergence_plot(f1, f2, R, t, max_iters=5000):
         F, mask = cv2.findFundamentalMat(xx1, xx2, cv2.USAC_MAGSAC, ransacReprojThreshold=3.0, confidence=1.0,
                                               maxIters=10000)
 
-        _, _, errs, iters = kukelova_single(eng, F, 660, iters=max_iters + 1, return_err=True, all_iters=True)
+        _, _, errs, iters = ours_single(eng, F, 660, iters=max_iters + 1, return_err=True, all_iters=True)
         s = np.array(errs).shape
         if s != (1, max_iters + 1):
             continue
@@ -102,7 +102,7 @@ def single_eth3d_convergence_plot(max_iters=5000):
         F, mask = cv2.findFundamentalMat(kp_1, kp_2, cv2.USAC_MAGSAC, ransacReprojThreshold=3.0, confidence=1.0,
                                          maxIters=10000)
 
-        _, _, errs, iters = kukelova_single(eng, F, colmap_1, iters=max_iters + 1, return_err=True, all_iters=True)
+        _, _, errs, iters = ours_single(eng, F, colmap_1, iters=max_iters + 1, return_err=True, all_iters=True)
         s = np.array(errs).shape
         if s != (1, max_iters + 1):
             # continue

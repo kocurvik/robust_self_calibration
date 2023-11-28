@@ -3,7 +3,7 @@ import poselib
 from matplotlib import pyplot as plt
 from sklearn.neighbors import KernelDensity
 
-from matlab_utils.engine_calls import kukelova_uncal
+from matlab_utils.engine_calls import ours_uncal
 from methods.base import bougnoux_original
 
 
@@ -30,7 +30,7 @@ def vote_7pt(eng, kp_1, kp_2, f_1_prior, f_2_prior, f_1_gt, n=1000, width=50):
         for F in Fs:
             f_1_sq, f_2_sq = bougnoux_original(F)
 
-            f_1_kuk, f_2_kuk, pp1, pp2 = kukelova_uncal(eng, F, f_1_prior, f_2_prior)
+            f_1_kuk, f_2_kuk, pp1, pp2 = ours_uncal(eng, F, f_1_prior, f_2_prior)
 
             kukelova_all_f_1s.append(f_1_kuk)
             kukelova_all_f_2s.append(f_2_kuk)

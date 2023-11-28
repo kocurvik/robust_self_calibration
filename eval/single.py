@@ -12,7 +12,7 @@ from methods.fetzer import fetzer_single
 from methods.hartley import hartley_sturm, hartley_single
 from utils.geometry import pose_from_F, angle_matrix, angle, get_K, pose_from_estimated, pose_from_img_info
 
-from matlab_utils.engine_calls import kukelova_single, kukelova_uncal
+from matlab_utils.engine_calls import ours_single, ours_uncal
 
 
 class OneFocalManager(EvalManager):
@@ -101,7 +101,7 @@ class OneFocalManager(EvalManager):
 
         # kukelova
         if 'kukelova' in self.methods:
-            f_est, pp = kukelova_single(self.eng, F_best, colmap, w1=0.01)
+            f_est, pp = ours_single(self.eng, F_best, colmap, w1=0.01)
             R, t = pose_from_estimated(F_best, colmap, colmap, f_est, f_est, info, kp_1, kp_2, pp, pp)
             entry = {'subset': self.subset, 'method_name': 'kukelova', 'pp': pp, 'f_est': f_est,
                      'R_err': angle_matrix(R.T @ R_gt), 't_err': angle(t, t_gt), 'R': R, 't': t, 'F': F_best,
@@ -109,7 +109,7 @@ class OneFocalManager(EvalManager):
             self.df.loc[len(self.df)] = entry
 
         if 'kukelova-diff' in self.methods:
-            f_1_est, f_2_est, pp_1, pp_2 = kukelova_uncal(self.eng, F_best, colmap, colmap, w1=0.005, w3=0.005)
+            f_1_est, f_2_est, pp_1, pp_2 = ours_uncal(self.eng, F_best, colmap, colmap, w1=0.005, w3=0.005)
             f_est = (f_1_est + f_2_est) / 2
             pp = (pp_1 + pp_2) / 2
             R, t = pose_from_estimated(F_best, colmap, colmap, f_est, f_est, info, kp_1, kp_2, pp, pp)
@@ -197,7 +197,7 @@ class OneFocalManager(EvalManager):
 
         # kukelova
         if 'kukelova_rfc' in self.methods:
-            f_est, pp = kukelova_single(self.eng, F_best, colmap, w1=0.01)
+            f_est, pp = ours_single(self.eng, F_best, colmap, w1=0.01)
             R, t = pose_from_estimated(F_best, colmap, colmap, f_est, f_est, info, kp_1, kp_2, pp, pp)
             entry = {'subset': self.subset, 'method_name': 'kukelova_rfc', 'pp': pp, 'f_est': f_est,
                      'R_err': angle_matrix(R.T @ R_gt), 't_err': angle(t, t_gt), 'R': R, 't': t, 'F': F_best,

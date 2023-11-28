@@ -5,10 +5,10 @@ import matlab
 # from methods.base import bougnoux_original
 
 
-def kukelova_uncal(eng, F, f1_prior, f2_prior,
-                   p1_prior=(0.0, 0.0), p2_prior=(0.0, 0.0),
-                   w1=5e-4, w2=1.0, w3=5e-4, w4=1.0,
-                   return_err=False, iters=50, all_iters=False):
+def ours_uncal(eng, F, f1_prior, f2_prior,
+               p1_prior=(0.0, 0.0), p2_prior=(0.0, 0.0),
+               w1=5e-4, w2=1.0, w3=5e-4, w4=1.0,
+               return_err=False, iters=50, all_iters=False):
 
     # f1_sq, f2_sq = bougnoux_original(F, p1_prior, p2_prior)
     #
@@ -36,15 +36,13 @@ def kukelova_uncal(eng, F, f1_prior, f2_prior,
     return f1, f2, p1, p2
 
 
-def kukelova_single_uncal(eng, F, f_prior, p_prior=[0.0, 0.0], w1=0.1, w2=1.0):
-    f1, f2, p1, p2 = kukelova_uncal(eng, F, f_prior, f_prior, p1_prior=p_prior, p2_prior=p_prior, w1=w1, w2=w2, w3=w1, w4=w2)
+def ours_single_uncal(eng, F, f_prior, p_prior=[0.0, 0.0], w1=0.1, w2=1.0):
+    f1, f2, p1, p2 = ours_uncal(eng, F, f_prior, f_prior, p1_prior=p_prior, p2_prior=p_prior, w1=w1, w2=w2, w3=w1, w4=w2)
     return (f1 + f2) / 2, (p1 + p2) / 2
 
 
-
-
-def kukelova_single(eng, F, f_prior, p_prior=(0.0, 0.0), w1=0.01, w2=0.1,
-                   return_err=False, iters=50, all_iters=False):
+def ours_single(eng, F, f_prior, p_prior=(0.0, 0.0), w1=0.01, w2=0.1,
+                return_err=False, iters=50, all_iters=False):
     F = matlab.double(F.tolist())
 
     try:

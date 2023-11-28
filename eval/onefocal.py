@@ -7,7 +7,7 @@ from eval.manager import EvalManager, focal_error, run_eval
 from utils.geometry import pose_from_F, angle_matrix, angle, get_K, pose_from_estimated, pose_from_img_info
 
 from methods.base import focal_svd
-from matlab_utils.engine_calls import kukelova_uncal
+from matlab_utils.engine_calls import ours_uncal
 
 
 class OneFocalManager(EvalManager):
@@ -60,7 +60,7 @@ class OneFocalManager(EvalManager):
         self.df.loc[len(self.df)] = entry
 
         # kukelova
-        f_1_est, f_2_est, pp1, pp2 = kukelova_uncal(self.eng, F_best, colmap_1, cam_2['focal'], w3=100, w4=100)
+        f_1_est, f_2_est, pp1, pp2 = ours_uncal(self.eng, F_best, colmap_1, cam_2['focal'], w3=100, w4=100)
         R, t = pose_from_estimated(F_best, colmap_1, colmap_2, f_1_est, cam_2['focal'], info, kp_1, kp_2, pp1)
         entry = {'subset': self.subset, 'method_name': 'kukelova', 'pp1': p_1, 'pp2': p_2, 'f_1_est': f_1_est,
                  'R_err': angle_matrix(R.T @ R_gt), 't_err': angle(t, t_gt), 'R': R, 't': t, 'F': F_best,

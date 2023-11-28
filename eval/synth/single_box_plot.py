@@ -8,7 +8,7 @@ from scipy.spatial.transform import Rotation
 from tqdm import tqdm
 
 from eval.synth.synth_scenarios import get_scene, noncoplanar_scene, coplanar_scene, set_scene, get_pp_err
-from matlab_utils.engine_calls import kukelova_uncal, kukelova_single, kukelova_single_uncal
+from matlab_utils.engine_calls import ours_uncal, ours_single, ours_single_uncal
 from methods.base import bougnoux_original, get_focal_sturm, single_6pt_minimal
 from methods.fetzer import fetzer_focal_only, fetzer_single
 from methods.hartley import hartley, hartley_sturm, hartley_single
@@ -47,7 +47,7 @@ def single_coplanarity_plot(load=True, ylim=(0, 1400), repeats=20, legend_visibl
                 F, mask = cv2.findFundamentalMat(xx1, xx2, cv2.USAC_MAGSAC)
                 mask = mask.ravel().astype(np.bool)
 
-                df = df.append({'angle': angle_str(angle), 'f': kukelova_single(eng, F, f1_prior)[0], 'Method': 'Ours'}, ignore_index = True)
+                df = df.append({'angle': angle_str(angle), 'f': ours_single(eng, F, f1_prior)[0], 'Method': 'Ours'}, ignore_index = True)
                 df = df.append({'angle': angle_str(angle), 'f': hartley_single(F, xx1[mask], xx2[mask], f1_prior)[0] , 'Method': 'Hartley'}, ignore_index = True)
                 df = df.append({'angle': angle_str(angle), 'f': fetzer_single(F, f1_prior)[0], 'Method': 'Fetzer'}, ignore_index = True)
                 df = df.append({'angle': angle_str(angle), 'f': get_focal_sturm(F), 'Method': 'Sturm'}, ignore_index = True)
@@ -128,7 +128,7 @@ def single_coplanarity_y_plot(load=True, ylim=(0, 1400), repeats=20, legend_visi
                 F, mask = cv2.findFundamentalMat(xx1, xx2, cv2.USAC_MAGSAC)
                 mask = mask.ravel().astype(np.bool)
 
-                df = df.append({'y': y_str(y), 'f': kukelova_single(eng, F, f1_prior)[0], 'Method': 'Ours'}, ignore_index = True)
+                df = df.append({'y': y_str(y), 'f': ours_single(eng, F, f1_prior)[0], 'Method': 'Ours'}, ignore_index = True)
                 df = df.append({'y': y_str(y), 'f': hartley_single(F, xx1[mask], xx2[mask], f1_prior)[0] , 'Method': 'Hartley'}, ignore_index = True)
                 df = df.append({'y': y_str(y), 'f': fetzer_single(F, f1_prior)[0], 'Method': 'Fetzer'}, ignore_index = True)
                 df = df.append({'y': y_str(y), 'f': get_focal_sturm(F), 'Method': 'Sturm'}, ignore_index = True)
@@ -207,7 +207,7 @@ def single_noise_box_plot(load=True, ylim=(0, 1400), repeats=20, legend_visible=
                 F, mask = cv2.findFundamentalMat(xx1, xx2, cv2.USAC_MAGSAC)
                 mask = mask.ravel().astype(np.bool)
 
-                df = df.append({'Noise': sigma, 'f': kukelova_single(eng, F, f1_prior)[0], 'Method': 'Ours'}, ignore_index = True)
+                df = df.append({'Noise': sigma, 'f': ours_single(eng, F, f1_prior)[0], 'Method': 'Ours'}, ignore_index = True)
                 df = df.append({'Noise': sigma, 'f': hartley_single(F, xx1[mask], xx2[mask], f1_prior)[0] , 'Method': 'Hartley'}, ignore_index = True)
                 df = df.append({'Noise': sigma, 'f': fetzer_single(F, f1_prior)[0], 'Method': 'Fetzer'}, ignore_index = True)
                 df = df.append({'Noise': sigma, 'f': get_focal_sturm(F), 'Method': 'Sturm'}, ignore_index = True)
@@ -283,7 +283,7 @@ def single_principal_boxplot(load=True, ylim=(0, 1400), repeats=20, legend_visib
                 F, mask = cv2.findFundamentalMat(xx1, xx2, cv2.USAC_MAGSAC)
                 mask = mask.ravel().astype(np.bool)
 
-                df = df.append({'Noise': sigma_p, 'f': kukelova_single(eng, F, f1_prior)[0], 'Method': 'Ours'},
+                df = df.append({'Noise': sigma_p, 'f': ours_single(eng, F, f1_prior)[0], 'Method': 'Ours'},
                                ignore_index=True)
                 df = df.append(
                     {'Noise': sigma_p, 'f': hartley_single(F, xx1[mask], xx2[mask], f1_prior)[0], 'Method': 'Hartley'},
@@ -362,7 +362,7 @@ def single_prior_boxplot(load=True, ylim=(0, 1400), repeats=20, legend_visible=T
                 F, mask = cv2.findFundamentalMat(xx1, xx2, cv2.USAC_MAGSAC)
                 mask = mask.ravel().astype(np.bool)
 
-                df = df.append({'f Prior': str(f_1_prior), 'f': kukelova_single(eng, F, f_1_prior)[0], 'Method': 'Ours'},
+                df = df.append({'f Prior': str(f_1_prior), 'f': ours_single(eng, F, f_1_prior)[0], 'Method': 'Ours'},
                                ignore_index=True)
                 df = df.append(
                     {'f Prior': str(f_1_prior), 'f': hartley_single(F, xx1[mask], xx2[mask], f_1_prior)[0], 'Method': 'Hartley'},
@@ -444,7 +444,7 @@ def single_weight_boxplot(load=True, ylim=(0, 1400), repeats=20, legend_visible=
                 mask = mask.ravel().astype(np.bool)
 
                 df = df.append(
-                    {'Weight': str(weight), 'f': kukelova_single(eng, F, f_1_prior, w1=weight)[0],
+                    {'Weight': str(weight), 'f': ours_single(eng, F, f_1_prior, w1=weight)[0],
                      'Method': 'Ours'}, ignore_index=True)
                 df = df.append({'Weight': str(weight),
                                 'f': hartley_single(F, xx1[mask], xx2[mask], f_1_prior, w_focal=0.0001 * weight)[0],

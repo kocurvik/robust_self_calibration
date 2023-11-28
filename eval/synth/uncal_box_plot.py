@@ -8,7 +8,7 @@ from scipy.spatial.transform import Rotation
 from tqdm import tqdm
 
 from eval.synth.synth_scenarios import get_scene, noncoplanar_scene, coplanar_scene, set_scene, get_pp_err
-from matlab_utils.engine_calls import kukelova_uncal, kukelova_single, kukelova_single_uncal
+from matlab_utils.engine_calls import ours_uncal, ours_single, ours_single_uncal
 from methods.base import bougnoux_original, get_focal_sturm
 from methods.fetzer import fetzer_focal_only
 from methods.hartley import hartley, hartley_sturm
@@ -46,7 +46,7 @@ def uncal_coplanarity_plot(load=True, ylim=(0, 1400), repeats=20, legend_visible
                 F, mask = cv2.findFundamentalMat(xx1, xx2, cv2.USAC_MAGSAC)
                 mask = mask.ravel().astype(np.bool)
 
-                df = df.append({'angle': angle_str(angle), 'f_1': kukelova_uncal(eng, F, f1_prior, f2)[0], 'Method': 'Ours'}, ignore_index=True)
+                df = df.append({'angle': angle_str(angle), 'f_1': ours_uncal(eng, F, f1_prior, f2)[0], 'Method': 'Ours'}, ignore_index=True)
                 df = df.append({'angle': angle_str(angle), 'f_1': hartley(F, xx1[mask], xx2[mask], f1_prior, f2)[0], 'Method': 'Hartley'}, ignore_index=True)
                 df = df.append({'angle': angle_str(angle), 'f_1': fetzer_focal_only(F, f1_prior, f2)[0], 'Method': 'Fetzer'}, ignore_index=True)
                 df = df.append({'angle': angle_str(angle), 'f_1': np.sqrt(bougnoux_original(F)[0]), 'Method': 'Bougnoux'}, ignore_index=True)
@@ -131,7 +131,7 @@ def uncal_coplanarity_y_plot(load=True, ylim=(0, 1400), repeats=20, legend_visib
                 # df = df.append({'y': '{} $f_2$'.format(y), 'f_1': fetzer_focal_only(F, f1_prior, f2)[0], 'Method': 'Fetzer'}, ignore_index=True)
                 # df = df.append({'y': '{} $f_2$'.format(y), 'f_1': np.sqrt(bougnoux_original(F)[0]), 'Method': 'Bougnoux'}, ignore_index=True)
 
-                df = df.append({'y': y_str(y), 'f_1': kukelova_uncal(eng, F, f1_prior, f2)[0], 'Method': 'Ours'}, ignore_index=True)
+                df = df.append({'y': y_str(y), 'f_1': ours_uncal(eng, F, f1_prior, f2)[0], 'Method': 'Ours'}, ignore_index=True)
                 df = df.append({'y': y_str(y), 'f_1': hartley(F, xx1[mask], xx2[mask], f1_prior, f2)[0], 'Method': 'Hartley'}, ignore_index=True)
                 df = df.append({'y': y_str(y), 'f_1': fetzer_focal_only(F, f1_prior, f2)[0], 'Method': 'Fetzer'}, ignore_index=True)
                 df = df.append({'y': y_str(y), 'f_1': np.sqrt(bougnoux_original(F)[0]), 'Method': 'Bougnoux'}, ignore_index=True)
@@ -209,7 +209,7 @@ def uncal_noise_box_plot(load=True, ylim=(0, 1400), repeats=20, legend_visible=T
                 F, mask = cv2.findFundamentalMat(xx1, xx2, cv2.USAC_MAGSAC)
                 mask = mask.ravel().astype(np.bool)
 
-                df = df.append({'Noise': sigma, 'f_1': kukelova_uncal(eng, F, f1_prior, f2_prior)[0], 'Method': 'Ours'}, ignore_index = True)
+                df = df.append({'Noise': sigma, 'f_1': ours_uncal(eng, F, f1_prior, f2_prior)[0], 'Method': 'Ours'}, ignore_index = True)
                 df = df.append({'Noise': sigma, 'f_1': hartley(F, xx1[mask], xx2[mask], f1_prior, f2_prior)[0] , 'Method': 'Hartley'}, ignore_index = True)
                 df = df.append({'Noise': sigma, 'f_1': fetzer_focal_only(F, f1_prior, f2_prior)[0], 'Method': 'Fetzer'}, ignore_index = True)
                 df = df.append({'Noise': sigma, 'f_1': np.sqrt(bougnoux_original(F)[0]) , 'Method': 'Bougnoux'}, ignore_index = True)
@@ -286,7 +286,7 @@ def uncal_principal_boxplot(load=True, ylim=(0, 1400), repeats=20, legend_visibl
                 F, mask = cv2.findFundamentalMat(xx1, xx2, cv2.USAC_MAGSAC)
                 mask = mask.ravel().astype(np.bool)
 
-                df = df.append({'Noise': sigma_p, 'f_1': kukelova_uncal(eng, F, f1_prior, f2_prior)[0], 'Method': 'Ours'}, ignore_index = True)
+                df = df.append({'Noise': sigma_p, 'f_1': ours_uncal(eng, F, f1_prior, f2_prior)[0], 'Method': 'Ours'}, ignore_index = True)
                 df = df.append({'Noise': sigma_p, 'f_1': hartley(F, xx1[mask], xx2[mask], f1_prior, f2_prior)[0] , 'Method': 'Hartley'}, ignore_index = True)
                 df = df.append({'Noise': sigma_p, 'f_1': fetzer_focal_only(F, f1_prior, f2_prior)[0], 'Method': 'Fetzer'}, ignore_index = True)
                 df = df.append({'Noise': sigma_p, 'f_1': np.sqrt(bougnoux_original(F)[0]) , 'Method': 'Bougnoux'}, ignore_index = True)
@@ -358,7 +358,7 @@ def uncal_prior_boxplot(load=True, ylim=(0, 1400), repeats=20, legend_visible=Tr
                 F, mask = cv2.findFundamentalMat(xx1, xx2, cv2.USAC_MAGSAC)
                 mask = mask.ravel().astype(np.bool)
 
-                df = df.append({'f_1 Prior': str(f_1_prior), 'f_1': kukelova_uncal(eng, F, f_1_prior, f2)[0], 'Method': 'Ours'}, ignore_index = True)
+                df = df.append({'f_1 Prior': str(f_1_prior), 'f_1': ours_uncal(eng, F, f_1_prior, f2)[0], 'Method': 'Ours'}, ignore_index = True)
                 df = df.append({'f_1 Prior': str(f_1_prior), 'f_1': hartley(F, xx1[mask], xx2[mask], f_1_prior, f2)[0] , 'Method': 'Hartley'}, ignore_index = True)
                 df = df.append({'f_1 Prior': str(f_1_prior), 'f_1': fetzer_focal_only(F, f_1_prior, f2)[0] , 'Method': 'Fetzer'}, ignore_index = True)
 
@@ -432,7 +432,7 @@ def uncal_weight_boxplot(load=True, ylim=(0, 1400), repeats=20, legend_visible=T
                 F, mask = cv2.findFundamentalMat(xx1, xx2, cv2.USAC_MAGSAC)
                 mask = mask.ravel().astype(np.bool)
 
-                df = df.append({'Weight': str(weight), 'f_1': kukelova_uncal(eng, F, f_1_prior, f2, w1=weight, w3=weight)[0], 'Method': 'Ours'}, ignore_index = True)
+                df = df.append({'Weight': str(weight), 'f_1': ours_uncal(eng, F, f_1_prior, f2, w1=weight, w3=weight)[0], 'Method': 'Ours'}, ignore_index = True)
                 df = df.append({'Weight': str(weight), 'f_1': hartley(F, xx1[mask], xx2[mask], f_1_prior, f2, w_focal=0.0001*weight)[0], 'Method': 'Hartley'}, ignore_index = True)
 
                 # if f_1_prior == 600:

@@ -19,10 +19,10 @@ from methods.fetzer import fetzer, fetzer_focal_only
 from utils.geometry import pose_from_F, angle_matrix, angle, get_K, pose_from_estimated, pose_from_img_info
 from methods.hartley import hartley
 
-from methods.base import bougnoux_original, kukelova_boug_uncal
-from matlab_utils.engine_calls import kukelova_uncal
+from methods.base import bougnoux_original
+from matlab_utils.engine_calls import ours_uncal
 
-from methods.ours import kukelova_uncal as kukelova_uncal_cxx
+from methods.ours import ours_uncal as ours_uncal_cxx
 
 
 class UncalManager(EvalManager):
@@ -141,7 +141,7 @@ class UncalManager(EvalManager):
         # kukelova
         if 'kukelova' in self.methods:
             start = perf_counter()
-            f_1_est, f_2_est, pp1, pp2, _, iters = kukelova_uncal(self.eng, F_best, colmap_1, colmap_2, return_err=True)
+            f_1_est, f_2_est, pp1, pp2, _, iters = ours_uncal(self.eng, F_best, colmap_1, colmap_2, return_err=True)
             end = perf_counter()
             R, t = pose_from_estimated(F_best, colmap_1, colmap_2, f_1_est, f_2_est, info, kp_1, kp_2, pp1, pp2)
             entry = {'subset': self.subset, 'method_name': 'kukelova', 'pp1': pp1, 'pp2': pp2, 'f_1_est': f_1_est, 'f_2_est': f_2_est,
@@ -153,7 +153,7 @@ class UncalManager(EvalManager):
         # kukelova
         if 'kukelova-cxx' in self.methods:
             start = perf_counter()
-            f_1_est, f_2_est, pp1, pp2, _, iters = kukelova_uncal_cxx(F_best, colmap_1, colmap_2, iters=100, return_err=True)
+            f_1_est, f_2_est, pp1, pp2, _, iters = ours_uncal_cxx(F_best, colmap_1, colmap_2, iters=100, return_err=True)
             end = perf_counter()
             R, t = pose_from_estimated(F_best, colmap_1, colmap_2, f_1_est, f_2_est, info, kp_1, kp_2, pp1, pp2)
             entry = {'subset': self.subset, 'method_name': 'kukelova-cxx', 'pp1': pp1, 'pp2': pp2, 'f_1_est': f_1_est, 'f_2_est': f_2_est,
@@ -244,7 +244,7 @@ class UncalManager(EvalManager):
         # kukelova
         if 'kukelova_rfc' in self.methods:
             start = perf_counter()
-            f_1_est, f_2_est, pp1, pp2, _, iters = kukelova_uncal(self.eng, F_best, colmap_1, colmap_2, return_err=True)
+            f_1_est, f_2_est, pp1, pp2, _, iters = ours_uncal(self.eng, F_best, colmap_1, colmap_2, return_err=True)
             end = perf_counter()
             R, t = pose_from_estimated(F_best, colmap_1, colmap_2, f_1_est, f_2_est, info, kp_1, kp_2, pp1, pp2)
             entry = {'subset': self.subset, 'method_name': 'kukelova_rfc', 'pp1': pp1, 'pp2': pp2, 'f_1_est': f_1_est, 'f_2_est': f_2_est,
@@ -256,7 +256,7 @@ class UncalManager(EvalManager):
         # kukelova
         if 'kukelova-cxx_rfc' in self.methods:
             start = perf_counter()
-            f_1_est, f_2_est, pp1, pp2, _, iters = kukelova_uncal_cxx(F_best, colmap_1, colmap_2, iters=100, return_err=True)
+            f_1_est, f_2_est, pp1, pp2, _, iters = ours_uncal_cxx(F_best, colmap_1, colmap_2, iters=100, return_err=True)
             end = perf_counter()
             R, t = pose_from_estimated(F_best, colmap_1, colmap_2, f_1_est, f_2_est, info, kp_1, kp_2, pp1, pp2)
             entry = {'subset': self.subset, 'method_name': 'kukelova-cxx_rfc', 'pp1': pp1, 'pp2': pp2, 'f_1_est': f_1_est, 'f_2_est': f_2_est,

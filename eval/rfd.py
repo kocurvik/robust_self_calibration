@@ -18,7 +18,7 @@ import poselib
 
 from datasets.definitions import get_subset_string
 from eval.manager import focal_error
-from matlab_utils.engine_calls import kukelova_uncal
+from matlab_utils.engine_calls import ours_uncal
 from methods.base import bougnoux_original
 from utils.geometry import pose_from_F, get_K, angle_matrix, angle, pose_from_estimated
 
@@ -282,7 +282,7 @@ class RFDManager:
                     continue
 
                 start = perf_counter()
-                f_1_est, f_2_est, pp1, pp2 = kukelova_uncal(self.eng, F, colmap_1, colmap_2)
+                f_1_est, f_2_est, pp1, pp2 = ours_uncal(self.eng, F, colmap_1, colmap_2)
                 end = perf_counter()
                 R, t = pose_from_estimated(F, colmap_1, colmap_2, f_1_est, f_2_est, info, kp_1, kp_2, pp1, pp2)
                 entry = {'subset': self.subset, 'f_method': 'kukelova', 'f_elapsed': end - start,

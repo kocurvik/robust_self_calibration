@@ -1,7 +1,7 @@
 import numpy as np
 import poselib
 
-from matlab_utils.engine_calls import kukelova_uncal
+from matlab_utils.engine_calls import ours_uncal
 
 
 def bougnoux_rybkin(F):
@@ -48,13 +48,13 @@ def focal_svd(F, f_undo):
     return a ** 2 * v_13 ** 2 / (a ** 2 * v_13 ** 2 - a ** 2 + b ** 2)
 
 
-def kukelova_boug_uncal(eng, F, f1_prior, f2_prior, p1=(0.0, 0.0), p2=(0.0, 0.0), **kwargs):
+def ours_boug_uncal(eng, F, f1_prior, f2_prior, p1=(0.0, 0.0), p2=(0.0, 0.0), **kwargs):
     pp1 = np.append(p1, 1).reshape(3, 1)
     pp2 = np.append(p2, 1).reshape(3, 1)
     try:
         e2, _, e1 = np.linalg.svd(F)
     except Exception:
-        return kukelova_uncal(eng, F, f1_prior, f2_prior, p1, p2, **kwargs)
+        return ours_uncal(eng, F, f1_prior, f2_prior, p1, p2, **kwargs)
 
     e1 = e1[2, :]
     e2 = e2[:, 2]
@@ -76,13 +76,13 @@ def kukelova_boug_uncal(eng, F, f1_prior, f2_prior, p1=(0.0, 0.0), p2=(0.0, 0.0)
     den_2 = (pp1.T @ s_e1 @ II @ F.T @ II @ F @ pp1)
 
     if np.abs(den_1)[0, 0] < 1e-8 or np.abs(den_2)[0, 0] < 1e-8:
-        return kukelova_uncal(eng, F, f1_prior, f2_prior, p1, p2, **kwargs)
+        return ours_uncal(eng, F, f1_prior, f2_prior, p1, p2, **kwargs)
 
     f1 = (-pp2.T @ s_e2 @ II @ F @ (pp1 @ pp1.T) @ F.T @ pp2) / den_1
     f2 = (-pp1.T @ s_e1 @ II @ F.T @ (pp2 @ pp2.T) @ F @ pp1) / den_2
 
     if f1[0, 0] < 0.0 or f2[0, 0] < 0.0:
-        return kukelova_uncal(eng, F, f1_prior, f2_prior, p1, p2, **kwargs)
+        return ours_uncal(eng, F, f1_prior, f2_prior, p1, p2, **kwargs)
 
     return np.sqrt(f1[0, 0]), np.sqrt(f2[0, 0]), p1, p2
 
