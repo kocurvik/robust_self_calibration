@@ -1,6 +1,8 @@
 
 # Code for paper: Robust Self-calibration of Focal Lengths from the Fundamental Matrix
 
+Preprint available at: [arXiv:2311.16304](https://arxiv.org/abs/2311.16304)
+
 ## Installation
 
 1. Clone the repo: `git clone https://github.com/kocurvik/robust_self_calibration`
@@ -65,4 +67,17 @@ If you want to use the Matlab version you should check out the `matlab_utils/eng
     s = eng.genpath('path/to/robust_self_calibration/matlab_utils')  
     eng.addpath(s, nargout=0)
 
+## Citation
 
+If you find this repository useful please consider citing:
+
+```
+@misc{kocur2023robust,
+      title={Robust Self-calibration of Focal Lengths from the Fundamental Matrix}, 
+      author={Viktor Kocur and Daniel Kyselica and Zuzana Kúkelová},
+      year={2023},
+      eprint={2311.16304},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+```
