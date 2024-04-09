@@ -67,6 +67,8 @@ If you want to use the Matlab version you should check out the `matlab_utils/eng
     s = eng.genpath('path/to/robust_self_calibration/matlab_utils')  
     eng.addpath(s, nargout=0)
 
+*Note*: During experiments we always shifted all of the point correspondences so that the priors for the principal points were at (0, 0). It seems that without this the method is significantly less stable. If you already have F then you can transform it using the eq. (1) from [Peter Sturm's paper](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=d561e7c9075d3a88d40b5e84e1302e422b49b56f) and after you obtain estimates for the principal point you add them to the values you used in the transformation matrices.
+
 ## Citation
 
 If you find this repository useful please consider citing:
