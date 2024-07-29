@@ -1,7 +1,26 @@
 
 # Code for paper: Robust Self-calibration of Focal Lengths from the Fundamental Matrix
 
-Preprint available at: [arXiv:2311.16304](https://arxiv.org/abs/2311.16304)
+Published at CVPR 2024. Open access version available [here](https://openaccess.thecvf.com/content/CVPR2024/html/Kocur_Robust_Self-calibration_of_Focal_Lengths_from_the_Fundamental_Matrix_CVPR_2024_paper.html). Preprint version available at [arXiv:2311.16304](https://arxiv.org/abs/2311.16304).
+
+# UPDATE - July 2024
+
+The iterative focal method has been integrated into [PoseLib](https://github.com/PoseLib/PoseLib) master branch. To method can be used by calling `focals_from_fundamental_iterative`. Note that this version is tuned to have better numerics than the C++ code present in this repo.
+
+Python bindings are also available so you can call the method like this:
+```python
+    prior_cam1 = {'model': 'SIMPLE_PINHOLE', 'width': -1, 'height': -1, 'params': [f1_prior, p1_prior[0], p1_prior[1]]}
+    prior_cam2 = {'model': 'SIMPLE_PINHOLE', 'width': -1, 'height': -1, 'params': [f2_prior, p2_prior[0], p2_prior[1]]}
+
+    cam1, cam2, iter = poselib.focals_from_fundamental_iterative(F, prior_cam1, prior_cam2, max_iters=50,
+                                                                 weights=np.array([5.0e-4, 1.0, 5.0e-4, 1.0]))
+    p1 = np.array(cam1.params[1:])
+    p2 = np.array(cam2.params[1:])
+    f1 = cam1.focal()
+    f2 = cam2.focal()
+```
+
+If you want to use the code in your own codebase and do not want to compile the whole PoseLib library you can simply include the files [decompositions.cc](https://github.com/PoseLib/PoseLib/blob/master/PoseLib/misc/decompositions.cc) and [decompositions.h](https://github.com/PoseLib/PoseLib/blob/master/PoseLib/misc/decompositions.h) in your project.
 
 ## Installation
 
@@ -59,7 +78,9 @@ Note that you can change the correspondences to SP+SG by changing setting `-m sg
 If you want to use PoseLib for estimating the fundamental matrices you have to comment and uncomment the relevant parts of the eval scripts. The `-nw` parameter is used for multiprocessing. You can set it to 1 to use only a single process.
 
 ## Using the Method Outside This Repo
-If you want to use the c++ version you can look at how it is used in `methods/ours.py`. Since the c++ version is installed using a `setup.py` script, the package `iterative_focal` should be available in the whole environment.
+Deprecated: ~~If you want to use the c++ version you can look at how it is used in `methods/ours.py`. Since the c++ version is installed using a `setup.py` script, the package `iterative_focal` should be available in the whole environment.~~ 
+
+The tuned version of the C++ implementation is available in the PoseLib master branch (see above for instructions).
 
 If you want to use the Matlab version you should check out the `matlab_utils/engine_calls.py`. Note that when you run the engine you have to specify that the engine includes the relevant folder:
 
@@ -74,12 +95,11 @@ If you want to use the Matlab version you should check out the `matlab_utils/eng
 If you find this repository useful please consider citing:
 
 ```
-@misc{kocur2023robust,
-      title={Robust Self-calibration of Focal Lengths from the Fundamental Matrix}, 
-      author={Viktor Kocur and Daniel Kyselica and Zuzana Kúkelová},
-      year={2023},
-      eprint={2311.16304},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
+@inproceedings{kocur2024robust,
+  title={Robust Self-calibration of Focal Lengths from the Fundamental Matrix},
+  author={Kocur, Viktor and Kyselica, Daniel and K{\'u}kelov{\'a}, Zuzana},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  pages={5220--5229},
+  year={2024}
 }
 ```
